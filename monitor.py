@@ -52,12 +52,8 @@ def extrair_metrica(lista_estats, chave):
     )
 
 # ─── Loop Principal ────────────────────────────────────────────────────────────
-
 def main():
     while True:
-        if DEBUG:
-            print(f"\n[DEBUG] Iniciando nova consulta às {time.strftime('%H:%M:%S')}")
-
         try:
             resp = requests.get(ENDPOINT, headers=HEADERS, timeout=10)
         except requests.RequestException as e:
@@ -77,13 +73,23 @@ def main():
             time.sleep(INTERVALO_MIN * 60)
             continue
 
-        # Valida presença de jogos ao vivo
-        jogos = dados.get("jogos")
+        if isinstance(dados, list):
+            jogos = dados
+        else:
+            jogos = dados.get("jogos", [])
+
         if not jogos:
             print("⚠️ Nenhum jogo ao vivo encontrado ou chave inválida.")
             if DEBUG:
                 print("[DEBUG] Payload completo:", dados)
             time.sleep(INTERVALO_MIN * 60)
+            continue
+
+        for jogo in jogos:
+            # processamento das estatísticas...
+            pass
+
+        time.sleep(INTERVALO_MIN * 60)
             continue
 
         # Processa cada partida
