@@ -18,3 +18,20 @@ mu = float(os.getenv("MU", 2.5))
 s = float(os.getenv("S", 1))
 intervalo = int(os.getenv("INTERVALO_MIN", 10))
 debug = os.getenv("DEBUG", "False") == "True"
+import requests
+
+url = "https://api-football-v1.p.rapidapi.com/v3/fixtures/statistics"
+querystring = {"fixture": "4f980390b7fa2a4dd8246167b3a199"}  # substitua pelo ID correto
+
+headers = {
+    "X-RapidAPI-Key": "SUA_CHAVE_AQUI",
+    "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+}
+
+response = requests.get(url, headers=headers, params=querystring)
+dados = response.json()
+
+for time in dados['response']:
+    nome_time = time['team']['name']
+    estatisticas = {estat['type']: estat['value'] for estat in time['statistics']}
+    print(f"{nome_time}: {estatisticas}")
