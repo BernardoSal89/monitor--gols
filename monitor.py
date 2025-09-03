@@ -12,3 +12,9 @@ if __name__ == "__main__":
     ieg = calcular_ieg(ap, ca, fc, pc, esc, car)
     p_gol = probabilidade_gol(ieg)
     print(f"Probabilidade de gol nos próximos 10': {p_gol:.2%}") 
+import os
+
+mu = float(os.getenv("MU", 2.5))
+s = float(os.getenv("S", 1))
+intervalo = int(os.getenv("INTERVALO_MIN", 10))
+debug = os.getenv("DEBUG", "False") == "True"
