@@ -30,7 +30,8 @@ headers = {
 
 response = requests.get(url, headers=headers, params=querystring)
 dados = response.json()
-
+print("Conteúdo da resposta da API:")
+print(dados)
 for time in dados['response']:
     nome_time = time['team']['name']
     estatisticas = {estat['type']: estat['value'] for estat in time['statistics']}
