@@ -1,0 +1,6 @@
+services:
+  - type: worker
+    name: monitor-gols
+    runtime: python
+    buildCommand: ""
+    startCommand: "python monitor.py"
