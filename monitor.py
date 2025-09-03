@@ -6,7 +6,7 @@ def calcular_ieg(ap, ca, fc, pc, esc, car):
 def probabilidade_gol(ieg, mu=2.5, s=1):
     return 1 / (1 + math.exp(-(ieg - mu) / s))
 
-# Exemplo de uso
+
 if __name__ == "__main__":
     ap, ca, fc, pc, esc, car = 4, 2, 3, 62, 1, 0
     ieg = calcular_ieg(ap, ca, fc, pc, esc, car)
@@ -52,3 +52,11 @@ try:
         print("Conteúdo recebido:", dados)
 except Exception as e:
     print("❌ Erro ao processar resposta da API:", e)
+import time
+
+while True:
+    # 1. Buscar dados da API
+    # 2. Calcular IEG e P(gol)
+    # 3. Salvar ou exibir os resultados
+    print("Atualizando probabilidade de gol...")
+    time.sleep(300)  # espera 5 minutos
