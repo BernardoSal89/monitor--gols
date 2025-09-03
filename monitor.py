@@ -22,36 +22,21 @@ HEADERS = {
 # ─── Modelo: IEG e Probabilidade ───────────────────────────────────────────────
 
 def calcular_ieg(ap, ca, fc, pc, esc, car):
-    """
-    Índice de Expectativa de Gol (IEG)
-    ap: ataques perigosos
-    ca: chutes ao gol
-    fc: finalizações
-    pc: posse de bola (%)
-    esc: escanteios
-    car: cartões
-    """
     return 0.30*ap + 0.25*ca + 0.15*fc + 0.10*pc + 0.15*esc - 0.05*car
 
 def probabilidade_gol(ieg, mu=MU, s=S):
-    """
-    Função logística que retorna P(gol).
-    """
     return 1 / (1 + math.exp(-(ieg - mu) / s))
 
 # ─── Auxiliar para extrair estatística ────────────────────────────────────────
 
 def extrair_metrica(lista_estats, chave):
-    """
-    Procura em lista_estats um dicionário com 'tipo' == chave
-    e retorna int(valor) ou 0 se não encontrar.
-    """
     return next(
         (int(item["quantidade"]) for item in lista_estats if item["tipo"] == chave),
         0
     )
 
 # ─── Loop Principal ────────────────────────────────────────────────────────────
+
 def main():
     while True:
         try:
@@ -73,6 +58,7 @@ def main():
             time.sleep(INTERVALO_MIN * 60)
             continue
 
+        # Suporta tanto lista direta quanto dict com "jogos"
         if isinstance(dados, list):
             jogos = dados
         else:
@@ -85,13 +71,6 @@ def main():
             time.sleep(INTERVALO_MIN * 60)
             continue
 
-        for jogo in jogos:
-            # processamento das estatísticas...
-            pass
-
-        time.sleep(INTERVALO_MIN * 60)
-            continue
-
         # Processa cada partida
         for jogo in jogos:
             mand = jogo["time_mandante"]
@@ -99,16 +78,16 @@ def main():
             est_mand = jogo.get("estatisticas", {}).get("mandante", [])
             est_vis  = jogo.get("estatisticas", {}).get("visitante", [])
 
-            # Extrai métricas do mandante (faça o mesmo para o visitante, se quiser)
-            ap   = extrair_metrica(est_mand, "Ataques Perigosos")
-            ca   = extrair_metrica(est_mand, "Chutes ao Gol")
-            fc   = extrair_metrica(est_mand, "Finalizações")
-            pc   = extrair_metrica(est_mand, "Posse de Bola")
-            esc  = extrair_metrica(est_mand, "Escanteios")
-            car  = extrair_metrica(est_mand, "Cartões")
+            # Métricas do mandante
+            ap  = extrair_metrica(est_mand, "Ataques Perigosos")
+            ca  = extrair_metrica(est_mand, "Chutes ao Gol")
+            fc  = extrair_metrica(est_mand, "Finalizações")
+            pc  = extrair_metrica(est_mand, "Posse de Bola")
+            esc = extrair_metrica(est_mand, "Escanteios")
+            car = extrair_metrica(est_mand, "Cartões")
 
-            ieg  = calcular_ieg(ap, ca, fc, pc, esc, car)
-            pg   = probabilidade_gol(ieg)
+            ieg = calcular_ieg(ap, ca, fc, pc, esc, car)
+            pg  = probabilidade_gol(ieg)
 
             print(f"{mand['nome_popular']} x {vis['nome_popular']}")
             print(f" → IEG do mandante: {ieg:.2f}")
