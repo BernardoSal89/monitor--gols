@@ -35,3 +35,19 @@ for time in dados['response']:
     nome_time = time['team']['name']
     estatisticas = {estat['type']: estat['value'] for estat in time['statistics']}
     print(f"{nome_time}: {estatisticas}")
+import requests
+
+url = "URL_DA_API_AQUI"
+resposta = requests.get(url)
+
+try:
+    dados = resposta.json()
+    if 'resposta' in dados:
+        for time in dados['resposta']:
+            # processa os dados do time
+            print(time)
+    else:
+        print("⚠️ Chave 'resposta' não encontrada na resposta da API.")
+        print("Conteúdo recebido:", dados)
+except Exception as e:
+    print("❌ Erro ao processar resposta da API:", e)
